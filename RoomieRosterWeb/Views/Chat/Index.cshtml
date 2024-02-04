@@ -1,0 +1,42 @@
+﻿
+@model RoomieRosterWeb.Models.UserDto
+
+<link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
+<input type="hidden" id="selectedChatId" value=""/>
+<input type="hidden" id="username" value="@Model.Username" />
+<div class="row rounded-lg overflow-hidden shadow mt-5" style="height:78vh">
+    <!-- Users box-->
+    <div class="col-5 px-0 border-right-custom">
+        <div class="bg-white">
+
+            <div class="bg-gray px-4 py-2 bg-light">
+                <p class="h5 mb-0 py-1">Mesajlar</p>
+            </div>
+
+            <div class="messages-box" style="height:73vh">
+                <div class="list-group rounded-0">
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Chat Box-->
+    <div class="col-7 px-0">
+        <div class="bg-gray px-4 py-2 bg-light d-flex flex-row justify-content-end">
+            <p class="h5 mb-0 py-1 text-end me-2 username"></p>
+            <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="30" height="30" class="rounded-circle">
+        </div>
+        <div class="px-4 py-5 chat-box d-flex flex-column bg-white" style="height:73vh">
+            
+            <!-- Typing area -->
+            <form class="bg-light mt-auto w-100">
+                <div class="input-group">
+                    <input type="text" placeholder="Type a message" aria-describedby="sendMessage" class="form-control messageInput rounded-0 border-0 bg-light">
+                    <div class="input-group-append">
+                        <button id="sendMessage" type="button" class="btn btn-secondary-outline " style="color:#a3b384 !important"> <span class="bi bi-send-x-fill"></span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

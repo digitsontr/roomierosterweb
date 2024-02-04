@@ -1,0 +1,258 @@
+﻿@model RoomieRosterWeb.Models.UserPreferenecesDto
+
+@{
+}
+
+<div class="card mt-4 ">
+    <div class="card-header text-center">
+        Eşleştirme Özellikleri
+    </div>
+    <div class="card-body custom-scrollable-height-d justif-content-end">
+        <div class="d-flex flex-row justify-content-between px-2">
+            <div class="form-group w-50">
+                <select class="form-select" name="gender" aria-label="Gender">
+                    <option value="0">Erkek</option>
+                    <option value="1">Kadın</option>
+                    <option selected value="2">Farketmez</option>
+                </select>
+            </div>
+            <div class="form-group w-25 ms-4">
+                <input type="number" class="form-control" id="minimumRoommate" required>
+                <label for="minimumRoommate">Min Kişi</label>
+            </div>
+            <div class="form-group w-25 ms-2">
+                <input type="number" class="form-control" id="maximumRoommate" required>
+                <label for="maximumRoommate">Max Kişi</label>
+            </div>
+        </div>
+        <div class="d-flex flex-row px-2">
+            <div class="form-group w-100">
+                <select class="form-select  w-100" id="pet" aria-label="Pet">
+                    <option value="0">Evet</option>
+                    <option value="1">Hayır</option>
+                    <option selected value="2">Tartışılabilir</option>
+                </select>
+                <label for="pet">Evcil Hayvan Beslenebilir Mi ?</label>
+            </div>
+        </div>
+        <div class="d-flex flex-row px-2">
+            <div class="form-group w-100">
+                <select class="form-select  w-100" id="guest" aria-label="Pet">
+                    <option value="0">Evet</option>
+                    <option value="1">Hayır</option>
+                    <option selected value="2">Tartışılabilir</option>
+                </select>
+                <label for="guest">Misafir Getirilebilir Mi ?</label>
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-between px-2">
+            <div class="form-group w-50">
+                <select class="form-select  w-100" id="smoking" aria-label="Pet">
+                    <option value="0">Evet</option>
+                    <option value="1">Hayır</option>
+                    <option selected value="2">Tartışılabilir</option>
+                </select>
+                <label for="smoking">Sigara İçilebilir Mi ?</label>
+            </div>
+            <div class="form-group w-50">
+                <select class="form-select  w-100" id="alcohol" aria-label="Pet">
+                    <option value="0">Evet</option>
+                    <option value="1">Hayır</option>
+                    <option selected value="2">Tartışılabilir</option>
+                </select>
+                <label for="alcohol">Alkol Kullanılabilir Mi ?</label>
+            </div>
+        </div>
+        <div class="d-flex flex-row px-2">
+            <div class="form-group w-100">
+                <select class="form-select  w-100" id="foreign" aria-label="Pet">
+                    <option value="0">Evet</option>
+                    <option value="1">Hayır</option>
+                    <option selected value="2">Tartışılabilir</option>
+                </select>
+                <label for="foreign">Yabancı Uyruklu Olabilir Mi ?</label>
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-between px-2">
+            <div class="form-group w-50">
+                <select class="form-select  w-100" id="duration" aria-label="Pet">
+                    <option value="0">Yıllık</option>
+                    <option value="1">Dönemlik</option>
+                    <option selected value="2">Farketmez</option>
+                </select>
+                <label for="duration">Süre</label>
+            </div>
+            <div class="form-group w-50">
+                <select class="form-select  w-100" id="budget" aria-label="Pet">
+                    <option selected value="0₺-5000₺">0₺-5000₺</option>
+                    <option value="5000₺-10000₺">5000₺-10000₺</option>
+                    <option value="10000₺-15000₺">10000₺-15000₺</option>
+                    <option value="15000₺ +">15000₺ +</option>
+                </select>
+                <label for="budget">Bütçe Aralığı</label>
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-between px-2">
+            <div class="form-group w-50">
+                <select class="form-select  w-100" id="city" aria-label="Pet">
+                    <option selected value="">Şehir Seçiniz</option>
+                </select>
+                <label for="city">İl</label>
+            </div>
+            <div class="form-group w-50">
+                <select class="form-select  w-100" id="district" aria-label="Pet">
+                    <option selected value="">İlçe Seçiniz</option>
+                </select>
+                <label for="district">İlçe</label>
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-between px-2">
+            <div class="form-group w-100">
+                <select class="form-select  w-100" id="neighborhood" aria-label="Pet">
+                    <option selected value="">Mahalle Seçiniz</option>
+                </select>
+                <label for="neighborhood">İl</label>
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-between px-2">
+            <div class="form-group w-100">
+                <button type="button" class="btn btn-success custom-colored-button js-update-preferences w-100">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var jsonData = @Html.Raw(Json.Serialize(Model));
+
+    const addNeighborhoods = () => {
+        const neighborhoodElement = $('#neighborhood');
+        neighborhoodElement.find("option:not(:first)").remove();
+
+        window.cities['cities'].map((city) => {
+            if (city.name === $('#city').val()) {
+                city.towns.map((district) => {
+                    if (district.name === $('#district').val()) {
+                        district.districts.map((districtObject) => {
+                            districtObject.quarters.map((quarter) => {
+                                neighborhoodElement.append($("<option>").attr("value", quarter.name).text(quarter.name));
+                            })
+                        })
+                    }
+                })
+            }
+        });
+    }
+
+    const addDistricts = () => {
+        const districtElement = $('#district');
+        districtElement.find("option:not(:first)").remove();
+
+        window.cities['cities'].map((city) => {
+            if (city.name === $('#city').val()) {
+                city.towns.map((district) => {
+                    districtElement.append($("<option>").attr("value", district.name).text(district.name));
+                })
+            }
+        });
+
+        districtElement.on('change', function () {
+            addNeighborhoods();
+        });
+    }
+
+    const addCities = () => {
+        const selectElement = $('#city');
+
+        window.cities['cities'].map((city) => {
+            selectElement.append($("<option>").attr("value", city.name).text(city.name));
+        });
+
+        selectElement.on('change', function () {
+            addDistricts();
+        });
+    }
+
+    const selectUserAddress = () => {
+        $('#city').val(jsonData.address.city);
+
+        addDistricts();
+
+        $('#district').val(jsonData.address.district)
+
+        addNeighborhoods();
+
+        $('#neighborhood').val(jsonData.address.neighborhood);
+    }
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+        addCities();
+        selectUserAddress();
+        $('[name=gender]').val(jsonData.genderPref);
+        $('#minimumRoommate').val(jsonData.acceptableRoommatesMin);
+        $('#maximumRoommate').val(jsonData.acceptableRoommatesMax);
+        $('#pet').val(jsonData.petsAllowed);
+        $('#guest').val(jsonData.guestsAllowed);
+        $('#smoking').val(jsonData.smokingAllowed);
+        $('#alcohol').val(jsonData.alcoholAllowed);
+        $('#foreign').val(jsonData.foreignersAllowed);
+        $('#duration').val(jsonData.duration);
+
+        if (jsonData.budgetMax >= 15000) {
+            $('#budget').val('15000₺ +');
+        }
+
+        if (jsonData.budgetMin === 0) {
+            $('#budget').val('0₺-5000₺');
+        }
+
+        if (jsonData.budgetMin >= 5000 && jsonData.budgetMax < 10000) {
+            $('#budget').val('5000₺-10000₺');
+        }
+
+        if (jsonData.budgetMin >= 10000 && jsonData.budgetMax < 15000) {
+            $('#budget').val('10000₺-15000₺');
+        }
+
+        $(".js-update-preferences").off('click').on('click', (event) => {
+            const preferences = window.jsonData;
+
+            preferences.acceptableRoommatesMin = parseInt($('#minimumRoommate').val());
+            preferences.acceptableRoommatesMax = parseInt($('#maximumRoommate').val());
+            preferences.address = {
+                country: "Türkiye",
+                city: $('#city').val(),
+                district: $('#district').val(),
+                neighborhood: $('#neighborhood').val()
+            };
+            preferences.alcoholAllowed = parseInt($('#alcohol').val());
+            preferences.duration = parseInt($('#duration').val());
+            preferences.foreignersAllowed = parseInt($('#foreign').val());
+            preferences.genderPref = parseInt($('[name=gender]').val());
+            preferences.guestsAllowed = parseInt($('#guest').val());
+            preferences.hasHome = false;
+            preferences.petsAllowed = parseInt($('#pet').val());
+            preferences.smokingAllowed = parseInt($('#smoking').val());
+
+            preferences.budgetMin = parseInt($("#budget").val().split("₺")[0]);
+            preferences.budgetMax = parseInt($("#budget").val().split("-").slice(-1)[0].split('₺')[0]);
+
+            var settings = {
+                "url": "https://api.roomieroster.com/api/preferences",
+                "method": "PUT",
+                "timeout": 0,
+                "dataType": "json",
+                "data": JSON.stringify(preferences),
+                "headers": {
+                    "Authorization": `Bearer ${document.cookie.split('AccessToken=').slice(-1)[0].split(';')[0]}`,
+                    "Content-Type": 'application/json'
+                },
+            };
+
+            $.ajax(settings).done(function () {
+                window.location.reload();
+            });
+        });
+    });
+</script>

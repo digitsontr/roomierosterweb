@@ -18,5 +18,163 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: 'Mulish';
 }
+
+.toast-container{
+    z-index:998;
+}
+
+img.user-profile-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.custom-login-icon-container {
+    color:white !important;
+    background-color: #a3b384 !important;
+    width:75px;
+    height:75px;
+}
+.custom-login-icon {
+    color: white !important;
+    font-size:3rem;
+    font-weight:bold;
+}
+
+.bg-custom-1 {
+    background-color: #a3b384 !important;
+}
+
+.bg-custom-danger {
+    background-color: #FF6347 !important;
+}
+
+.bg-custom-2 {
+    background-color: #a3b384;
+}
+
+.bg-custom-dark {
+    background-color: #f7f7f7 !important;
+}
+
+.custom-blue-button {
+    background-color: #1876d1 !important;
+}
+
+
+.brand-bold {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: .5rem;
+}
+
+.digitsonLink {
+    text-decoration:none;
+    color:#313131 !important;
+}
+
+
+.card-text-name {
+    font-size: 2rem !important;
+    font-weight: bold !important;
+    letter-spacing: .1rem !important;
+}
+
+.custom-scrollable{
+    overflow-y:auto !important;
+}
+
+.custom-scrollable-height-d {
+   height:675px !important;
+}
+
+.custom-scrollable-height-m {
+    height: 400px !important;
+}
+
+.custom-scrollable-height-t {
+   height: 200px !important;
+}
+
+.card-text-feature{
+    padding:0 !important;
+    margin:0 !important;
+    margin-top:.1rem !important;
+}
+
+.custom-colored-button {
+    background-color: #a3b384 !important;
+    color:white !important;
+}
+
+.spinner {
+    background-color:white;
+    z-index:999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.spinner-grow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -25px;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 10px;
+}
+
+.border-right-custom {
+    border-right: 4px solid #F8F9FA;
+}
+
+/*For material input css start*/
+.form-group > label {
+    bottom: 34px;
+    left: 15px;
+    position: relative;
+    background-color: white;
+    padding: 0px 5px 0px 5px;
+    font-size: .8rem;
+    transition: 0.2s;
+    pointer-events: none;
+}
+
+.form-control:focus ~ label {
+    bottom: 50px;
+}
+
+.form-control:valid ~ label {
+    bottom: 50px;
+}
+
+.absolute-bottom {
+    bottom: 0;
+}
+
+
+.form-select ~ label {
+    bottom: 50px;
+    font-size: .8rem;
+}
+
+input[type=date]:required:invalid::-webkit-datetime-edit {
+    color: transparent;
+}
+
+input[type=date]:focus::-webkit-datetime-edit {
+    color: black !important;
+}
+
+input[type='date']:after {
+    content: attr(gg.aa.yyyy)
+}
+/*For material input css end*/
