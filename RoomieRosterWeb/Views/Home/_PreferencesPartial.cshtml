@@ -169,6 +169,9 @@
         });
 
         selectElement.on('change', function () {
+            const neighborhoodElement = $('#neighborhood');
+            neighborhoodElement.find("option:not(:first)").remove();
+
             addDistricts();
         });
     }
