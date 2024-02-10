@@ -90,7 +90,7 @@ const renderChatBox = (messageList, chatInfo) => {
         const messageBox = `
             <div class="media w-50 ${!isReciever ? 'ms-auto': ''} mb-3" bis_skin_checked="1">
                 <div class="media-body" bis_skin_checked="1">
-                    <div class="${!isReciever ? 'bg-custom-1' : ''} rounded py-2 px-3 mb-2" bis_skin_checked="1">
+                    <div class="${!isReciever ? 'bg-custom-1' : 'border border-dark'} rounded py-2 px-3 mb-2" bis_skin_checked="1">
                         <p class="text-small mb-0 ${!isReciever ? 'text-white' : ''}">${message.content}</p>
                     </div>
                     <p class="small text-muted">${messageTime} | ${messageDate}</p>
