@@ -11,25 +11,56 @@ const checkConnectionAndRun = (callback, count) => {
 }
 
 const connectionBuild = () => {
-    window.connection = new signalR.HubConnectionBuilder().withUrl(window.config.baseUrl + "chat", {
+    window.connection = new signalR.HubConnectionBuilder()
+    .withUrl(window.config.baseUrl + "chat", {
         accessTokenFactory: () => window.config.accessToken
-    }).build();
+    })
+    .withAutomaticReconnect([1000,1000,2000,3000,5000,10000,30000])
+    .build();
 
-    window.connection.start().then(function () {
-        if (isOnChatPage) {
-            onPreviousMessages();
-            getChats();
-            onUserChats();
-        } else {
-            $('.spinner').css('visibility', 'hidden');
-        }
+    startConnection();
 
-        onNewMessage();
-        
-    }).catch(function (err) {
-        return console.error(err.toString());
-        $('.spinner').css('visibility', 'hidden');
+    window.connection.onreconnecting(() => {
+        $('.connectionAlert').remove();
+        $('body').prepend(`<div class="alert alert-info mb-0 connectionAlert" role="alert">
+                   Yeniden bağlantı kurulmaya çalışılıyor.
+         </div>`);
     });
+
+    window.connection.onreconnected(() => {
+        $('.connectionAlert').remove();
+        $('body').prepend(`<div class="alert alert-success mb-0 connectionAlert" role="alert">
+                Bağlantı yeniden kuruldu.
+         </div>`);
+
+        setTimeout(() => { $('.connectionAlert').remove(); },2000)
+    });
+
+    window.connection.onclose(() => {
+        $('.connectionAlert').remove();
+        $('body').prepend(`<div class="alert alert-danger mb-0 connectionAlert" role="alert">
+               Bağlantı koptu, mesajları ve bildirimleri görebilmek için lütfen sayfayı yenileyiniz.
+         </div>`);
+    });
+}
+
+const startConnection = async () => {
+    try {
+        window.connection.start().then(function () {
+            if (isOnChatPage) {
+                onPreviousMessages();
+                getChats();
+                onUserChats();
+            } else {
+                $('.spinner').css('visibility', 'hidden');
+            }
+
+            onNewMessage();
+
+        })
+    } catch {
+        setTimeout(() => startConnection(), 2000);
+    }
 }
 
 
