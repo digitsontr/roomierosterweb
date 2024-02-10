@@ -71,7 +71,7 @@
 
             if (userId) {
                 var settings = {
-                    "url": `https://api.roomieroster.com/api/user/follow?id=${userId}`,
+                    "url": `${window.config.baseUrl}api/user/follow?id=${userId}`,
                     "method": "POST",
                     "timeout": 0,
                     "headers": {
@@ -99,7 +99,7 @@
 
             if (userId) {
                 var settings = {
-                    "url": `https://api.roomieroster.com/api/user/unfollow?id=${userId}`,
+                    "url": `${window.config.baseUrl}/api/user/unfollow?id=${userId}`,
                     "method": "POST",
                     "timeout": 0,
                     "headers": {

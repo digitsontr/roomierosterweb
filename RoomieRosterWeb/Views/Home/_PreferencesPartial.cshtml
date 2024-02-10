@@ -242,7 +242,7 @@
             preferences.budgetMax = parseInt($("#budget").val().split("-").slice(-1)[0].split('₺')[0]);
 
             var settings = {
-                "url": "https://api.roomieroster.com/api/preferences",
+                "url": `${window.config.baseUrl}api/preferences`,
                 "method": "PUT",
                 "timeout": 0,
                 "dataType": "json",
