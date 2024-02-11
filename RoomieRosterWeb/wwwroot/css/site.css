@@ -153,8 +153,9 @@ img.user-profile-image {
 }
 
 .form-control:focus ~ label {
-    bottom: 50px;
+    bottom: 50px
 }
+
 
 .form-control:valid ~ label {
     bottom: 50px;
@@ -168,6 +169,14 @@ img.user-profile-image {
 .form-select ~ label {
     bottom: 50px;
     font-size: .8rem;
+}
+
+.invalid-feedback{
+    margin-bottom:.5rem;
+}
+
+.form-control.is-valid + label {
+    bottom: 50px !important;
 }
 
 input[type=date]:required:invalid::-webkit-datetime-edit {
