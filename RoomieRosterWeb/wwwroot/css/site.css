@@ -26,6 +26,10 @@ body {
     z-index:998;
 }
 
+.matched-user-not-found{
+    height:100%;
+}
+
 img.user-profile-image {
     width: 50px;
     height: 50px;
