@@ -26,17 +26,25 @@ body {
     z-index:998;
 }
 
+.matched-user-not-found{
+    height:100%;
+}
+
 img.user-profile-image {
     width: 50px;
     height: 50px;
     object-fit: cover;
 }
 
-.custom-login-icon-container {
+.messages-box > .list-group > .list-group-item.active{
     color:white !important;
+}
+
+.custom-login-icon-container {
+    color: white !important;
     background-color: #a3b384 !important;
-    width:75px;
-    height:75px;
+    width: 75px;
+    height: 75px;
 }
 .custom-login-icon {
     color: white !important;
@@ -149,8 +157,9 @@ img.user-profile-image {
 }
 
 .form-control:focus ~ label {
-    bottom: 50px;
+    bottom: 50px
 }
+
 
 .form-control:valid ~ label {
     bottom: 50px;
@@ -164,6 +173,14 @@ img.user-profile-image {
 .form-select ~ label {
     bottom: 50px;
     font-size: .8rem;
+}
+
+.invalid-feedback{
+    margin-bottom:.5rem;
+}
+
+.form-control.is-valid + label {
+    bottom: 50px !important;
 }
 
 input[type=date]:required:invalid::-webkit-datetime-edit {

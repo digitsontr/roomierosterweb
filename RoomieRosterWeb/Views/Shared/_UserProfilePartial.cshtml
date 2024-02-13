@@ -18,7 +18,7 @@
 
 <script>window.addEventListener('DOMContentLoaded', () => {
         var settings = {
-            "url": `https://api.roomieroster.com/api/user/${window.jQuery("[name=userId]").val()}`,
+            "url": `${window.config.baseUrl}api/user/${window.jQuery("[name=userId]").val()}`,
             "method": "GET",
             "timeout": 0,
             "headers": {
