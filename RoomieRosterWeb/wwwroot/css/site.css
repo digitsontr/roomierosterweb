@@ -36,11 +36,15 @@ img.user-profile-image {
     object-fit: cover;
 }
 
-.custom-login-icon-container {
+.messages-box > .list-group > .list-group-item.active{
     color:white !important;
+}
+
+.custom-login-icon-container {
+    color: white !important;
     background-color: #a3b384 !important;
-    width:75px;
-    height:75px;
+    width: 75px;
+    height: 75px;
 }
 .custom-login-icon {
     color: white !important;

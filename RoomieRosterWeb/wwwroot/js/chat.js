@@ -1,5 +1,13 @@
 ﻿const isOnChatPage = window.location.pathname.toLowerCase().includes('/chat');
 
+const showLoader = () => {
+    $('.spinner').css('visibility', 'visible');
+}
+
+const hideLoader = () => {
+    $('.spinner').css('visibility', 'hidden');
+}
+
 const checkConnectionAndRun = (callback, count) => {
     setTimeout(() => {
         if ((window.connection || {}).state !== 'Connected' && count !== 0) {
@@ -9,6 +17,7 @@ const checkConnectionAndRun = (callback, count) => {
         }
     }, 500);
 }
+
 
 const connectionBuild = () => {
     window.connection = new signalR.HubConnectionBuilder()
@@ -51,8 +60,9 @@ const startConnection = async () => {
                 onPreviousMessages();
                 getChats();
                 onUserChats();
+                onMessageReaded();
             } else {
-                $('.spinner').css('visibility', 'hidden');
+                hideLoader();
             }
 
             onNewMessage();
@@ -73,7 +83,21 @@ const bindChatEvents = () => {
             $('.messages-box .list-group-item.active').removeClass('active');
             $(this).addClass('active');
 
-            getMessagesByChat(chatId);
+            if (chatId !== '0') {
+                getMessagesByChat(chatId);
+
+                if ($('.unreadedMessageBadge', this).length > 0) {
+                    readChat(chatId);
+                }
+            } else {
+                const selectedChatBox = $('.messages-box > .list-group > .list-group-item[data-chat-id=' + $('#selectedChatId').val() + ']');
+                const chatInfo = {
+                    recieverFullName: $('.username', selectedChatBox).text().trim(),
+                    reciverProfilePhoto: $('.user-profile-image', selectedChatBox).prop('src')
+                }
+                renderChatBox([], chatInfo);
+            }
+            
 
             bindChatEvents();
         });
@@ -133,8 +157,13 @@ const renderChatBox = (messageList, chatInfo) => {
 
     $('.chat-box').prev().find('.username').text(chatInfo.recieverFullName);
     $('.chat-box').prev().find('img').attr('src', chatInfo.reciverProfilePhoto);
-    $('.chat-box')[0].scrollTop = $('.chat-box')[0].scrollHeight; //TODO TEST HERE
-    $('.spinner').css('visibility', 'hidden');
+    $('.chat-box')[0].scrollTop = $('.chat-box')[0].scrollHeight;
+
+    hideLoader();
+
+    setTimeout(() => {
+        readChat($('.messages-box .list-group-item.active').attr('data-chat-id'));
+    }, 3000);
 };
 
 const renderMessageBoxes = (userBoxes) => {
@@ -154,8 +183,8 @@ const renderMessageBoxes = (userBoxes) => {
         }
 
         const userBoxHTML = `
-                    <a class="list-group-item list-group-item-action text-white rounded - 0" data-chat-id="${userBox.id}" data-username=${userBox.recieverUserName}>
-                        <div class="media">
+                    <a class="list-group-item list-group-item-action rounded - 0" data-chat-id="${userBox.id}" data-username=${userBox.recieverUserName}>
+                        <div class="media position-relative">
                             <img src="data:image/jpeg;base64, ${userBox.recieverProfilePhoto}" alt="user" width="50" class="rounded-circle user-profile-image">
                             <div class="media-body ml-4">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
@@ -163,16 +192,33 @@ const renderMessageBoxes = (userBoxes) => {
                                 </div>
                                 <p class="font-italic mb-0 text-small">${userBox.lastMessage || '&nbsp;<br />&nbsp;'}</p>
                             </div>
+                             ${userBox.isReaded !== false ? '' : `<span class="position-absolute top-0 mt-1 start-100 translate-middle unreadedMessageBadge p-2 bg-danger border border-light rounded-circle">
+                                    <span class="visually-hidden">New alerts</span>
+                                  </span>` }
                         </div>
                     </a>`;
-        if (key === 0) {
+        if (key === 0 && (($('#selectedChatId').val() || '') === '' || $('#selectedChatId').val() === '0')) {
             $('#selectedChatId').val(userBox.id);
         }
 
         $('.messages-box > .list-group').append(userBoxHTML);
-        $('.messages-box > .list-group a').removeClass('text-white');
-        $('.messages-box > .list-group a:first').addClass('active');
+
+        const selectedChatBox = $('.messages-box > .list-group > .list-group-item[data-chat-id=' + $('#selectedChatId').val() + ']');
+
+        if (!selectedChatBox.hasClass('active')) {
+            selectedChatBox.addClass('active');
+        }
+        
         bindChatEvents();
+
+        if (userBoxes[0].id === 0) {
+           
+            const chatInfo = {
+                recieverFullName: $('.username', selectedChatBox).text().trim(),
+                reciverProfilePhoto: $('.user-profile-image', selectedChatBox).prop('src')
+            }
+            renderChatBox([], chatInfo);
+        }
     });
 
     if (!window.isMessagesBoxRendered) {
@@ -191,11 +237,27 @@ const getChats = () => {
     });
 }
 
+
+const readChat = (chatId) => {
+    console.error('CHAT ID READED', chatId);
+    window.connection.invoke("ReadChat", Number(chatId)).then((response) => {
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+}
+
 const getMessagesByChat = (id) => {
     window.connection.invoke("GetMessagesByChat", Number(id)).then((response) => {
         console.log(response);
     }).catch(function (err) {
         return console.error(err.toString());
+    });
+}
+
+const onMessageReaded = () => {
+    connection.on("MessageReaded", (chatId) => {
+        console.log('message readed for', chatId);
+        $('.messages-box > .list-group > .list-group-item[data-chat-id=' + chatId + ']').find('.unreadedMessageBadge').remove();
     });
 }
 
@@ -205,14 +267,19 @@ const onPreviousMessages = () => {
         const chatInfo = {
             recieverFullName: $('.username', selectedChatBox).text().trim(),
             reciverProfilePhoto: $('.user-profile-image', selectedChatBox).prop('src')
+        };
+
+        if (messagesObject[0]?.chatId === Number($('#selectedChatId').val())) {
+            renderChatBox(messagesObject, chatInfo);
+        } else {
+            getChats();
         }
-        renderChatBox(messagesObject, chatInfo);
-        
     });
 }
 
 const onUserChats = () => {
     window.connection.on("UserChats", (response) => {
+        console.log('USER-CHATSS', response);
         const newChatUsername = window.location.href.split('username=')
             .slice(-1)[0].split('&')[0];
         const existUserInfo = response.map((chatInfo) => {
@@ -236,7 +303,7 @@ const onUserChats = () => {
             renderMessageBoxes(chatList);
 
             if (chatList.length === 0) {
-                $('.spinner').css('visibility', 'hidden');
+                hideLoader();
             }
         } else {
             startNewChat().done((userResponse) => {
@@ -251,7 +318,10 @@ const onUserChats = () => {
 
                 chatList = [userBox].concat(response);
 
-                renderMessageBoxes(chatList);
+                if (($('#selectedChatId').val() || '0') === '0') {
+                    renderMessageBoxes(chatList);
+                }
+                
             });
         }
     });
@@ -304,10 +374,16 @@ const timeDifferenceMessage = (compareDate) => {
 
 const onNewMessage = () => {
     connection.on("newMessage", (message) => {
-        console.log('NEW MESSAGE DEV', message);
-
         if (isOnChatPage) {
-            getMessagesByChat($('#selectedChatId').val());
+            if ($('.messages-box .list-group-item.active').attr('data-chat-id') === '0' && $('.messages-box .list-group-item.active').attr('data-username') === message.recieverUserName) {
+                $('#selectedChatId').val(message.chatId);
+                $('.messages-box .list-group-item.active').attr('data-chat-id', message.chatId);
+               
+                window.history.pushState({}, document.title, "/chat");
+            }
+
+            getMessagesByChat(message.chatId);
+            getChats();
         } else { 
             const toastTemplate = `
             <input type="hidden" id="createdAt" value="${message.createdAt}"/>
