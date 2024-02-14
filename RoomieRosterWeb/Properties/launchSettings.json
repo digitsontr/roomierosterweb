@@ -32,6 +32,14 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "develop": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:45715;http://localhost:31666",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Develop"
+      }
     }
   }
 }
