@@ -53,10 +53,10 @@ jobs:
             - name: Deploy
               run: |
                 git clone --depth 1 --single-branch -b deploy-main git@github.com:${{ github.repository }}.git deploy-main
-                mv deploy-main/.git deploy-main-.git
+                mv deploy-main/.git deploy-main.git
                 rm -rf deploy-main
                 mkdir deploy-main
-                mv deploy-main-.git deploy/.git
+                mv deploy-main.git deploy-main/.git
                 cd deploy-main
                 cp -R ../RoomieRosterWeb/bin/Release/net7.0/publish .
                 git add .
