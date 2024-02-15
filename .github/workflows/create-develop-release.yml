@@ -39,7 +39,7 @@ jobs:
                 NUGET_AUTH_TOKEN: ${{ github.token }}
                   
             - name: Build
-              run: dotnet publish --configuration Release
+              run: dotnet publish --configuration Develop
                 
             - name: Test
               run: dotnet test --no-restore --verbosity normal
