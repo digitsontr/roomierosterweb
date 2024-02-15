@@ -1,10 +1,9 @@
-name: create-develop-release
+name: create-release
 
 on:
-    pull_request:
-        types: [closed]
+    push:
         branches:
-            - 'develop'
+            - 'main'
 jobs:
     build:
         name: create-develop-release
@@ -53,12 +52,12 @@ jobs:
             # Push files to the "deploy" branch
             - name: Deploy
               run: |
-                git clone --depth 1 --single-branch -b deploy git@github.com:${{ github.repository }}.git deploy
-                mv deploy/.git deploy-.git
-                rm -rf deploy
-                mkdir deploy
-                mv deploy-.git deploy/.git
-                cd deploy
+                git clone --depth 1 --single-branch -b deploy-main git@github.com:${{ github.repository }}.git deploy-main
+                mv deploy-main/.git deploy-main-.git
+                rm -rf deploy-main
+                mkdir deploy-main
+                mv deploy-main-.git deploy/.git
+                cd deploy-main
                 cp -R ../RoomieRosterWeb/bin/Release/net7.0/publish .
                 git add .
                 git diff --staged --quiet || git commit -m "Update Artifacts"
