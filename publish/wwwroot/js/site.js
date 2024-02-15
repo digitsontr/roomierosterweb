@@ -6,5 +6,5 @@
 
 window.config = {
     accessToken: document.cookie.split('AccessToken=').slice(-1)[0].split(';')[0],
-    baseUrl: 'https://roomieroster.com/'
+    baseUrl: 'https://localhost:7032/'
 }
