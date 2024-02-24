@@ -8,7 +8,7 @@
 <input type="hidden" value="@userIdClaim?.Value" name="userId" />
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <img src="data:image/jpeg;base64, @profilePhoto" width="40" height="40" class="rounded-circle user-profile-image">
+        <img src="data:image/jpeg;base64, @profilePhoto" width="40" height="40" class="rounded-circle user-profile-image header">
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         <a class="dropdown-item nav-item px-3 digitsonLink" href="/Auth/Logout">Çıkış Yap</a>
@@ -28,6 +28,6 @@
 
         $.ajax(settings).done(function (response) {
             console.log(response);
-            $('.user-profile-image').prop('src', 'data:image/jpeg;base64, ' + (response.data || {}).profilePhoto)
+            $('.header.user-profile-image').prop('src', 'data:image/jpeg;base64, ' + (response.data || {}).profilePhoto)
         });
     });</script>
