@@ -58,7 +58,7 @@ jobs:
                 mkdir deploy-main
                 mv deploy-main.git deploy-main/.git
                 cd deploy-main
-                cp -R ../RoomieRosterWeb/bin/Release/net7.0/develop .
+                cp -R ../RoomieRosterWeb/bin/Release/net7.0/release .
                 git add .
                 git diff --staged --quiet || git commit -m "Update Artifacts"
                 git push
