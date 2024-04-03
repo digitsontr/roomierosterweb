@@ -3,7 +3,7 @@ name: create-release
 on:
     push:
         branches:
-            - 'main'
+            - 'develop'
 jobs:
     build:
         name: create-develop-release
@@ -58,7 +58,7 @@ jobs:
                 mkdir deploy-main
                 mv deploy-main.git deploy-main/.git
                 cd deploy-main
-                cp -R ../RoomieRosterWeb/bin/Release/net7.0/release .
+                cp -R ../RoomieRosterWeb/bin/Release/net7.0/develop .
                 git add .
                 git diff --staged --quiet || git commit -m "Update Artifacts"
                 git push
