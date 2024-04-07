@@ -1,0 +1,141 @@
+@model RoomieRosterWeb.ViewModels.IndexViewModel;
+@{
+    ViewData["Title"] = "Home Page";
+    string gender = "Kadın";
+    string location = "Türkiye";
+}
+
+<div class="container d-flex flex-row px-2 align-items-center">
+  
+    <div class="left w-75">
+        <div class="card mt-4">
+            <div class="card-header text-center">
+                Eşleşen Kullanıcılar
+            </div>
+            <div class="card-body bg-custom-dark custom-scrollable custom-scrollable-height-d">
+                @if (Model.Matches.Count() == 0)
+                {
+                        <div class="d-flex justify-content-center align-items-center text-center w-100 matched-user-not-found">
+                            Eşeleşen kullanıcı bulunamadı.
+                        </div>
+                }
+                else
+                {
+                    @foreach (MatchDto item in Model.Matches)
+                    {
+                        if (item.User.Gender == 0)
+                        {
+                            gender = "Erkek";
+                        }
+
+                        if (item.User.Preferences.Address.City != "")
+                        {
+                            location = item.User.Preferences.Address.City;
+                        }
+
+
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <div class="d-flex flex-row justify-content-between">
+                                    <img src="data:image/jpeg;base64, @item.User.ProfilePhoto" width="150px" height="100%" class="rounded">
+                                    <div class="d-flex flex-column w-75">
+                                        <h5 class="card-text card-text-name mb-1">@item.User.FirstName @item.User.LastName</h5>
+                                        <hr />
+                                        <p class="card-text card-text-feature">Cinsiyet: @gender</p>
+
+                                        <p class="card-text card-text-feature">Konum Tercihi: @location</p>
+                                        <p class="card-text card-text-feature">Tercih Edilen Bütçe Aralığı: @item.User.Preferences.BudgetMin ₺ - @item.User.Preferences.BudgetMax ₺</p>
+                                        <div class="d-flex justify-content-end px-2 mt-5">
+                                            <button type="button" data-user-id="@item.User.Id" data-username="@item.User.Username" class="btn btn-outline-secondary js-send-message me-1 px-2"><span class="bi bi-send-x-fill"></span>&nbsp;Mesaj Gönder</button>
+                                            @if (item.IsFolowing)
+                                            {
+                                                <button type="button" data-user-id="@item.User.Id" class="btn btn-outline-secondary js-remove-from-favourites px-2"><span class="bi bi-star-fill"></span>&nbsp;Favorilerden Çıkar</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" data-user-id="@item.User.Id" class="btn btn-outline-secondary js-add-to-favourites px-2"><span class="bi bi-star"></span>&nbsp;Favorilere Ekle</button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="aside">
+        @await Html.PartialAsync("_PreferencesPartial", Model.UserPreferences)
+    </div>
+</div>
+
+
+<script>
+    const bindEvents = () => {
+        $('.js-add-to-favourites').off('click').on('click', function (event) {
+            const userId = $(this).attr('data-user-id') || '';
+            const favouritesContext = $('span', this);
+            const favouritesButton = $(this);
+
+            if (userId) {
+                var settings = {
+                    "url": `${window.config.baseUrl}api/user/follow?id=${userId}`,
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Authorization": `Bearer ${document.cookie.split('AccessToken=').slice(-1)[0].split(';')[0]}`,
+                    },
+                };
+
+                $.ajax(settings).done(function (response) {
+                    favouritesContext.addClass('bi-star-fill');
+                    favouritesContext.removeClass('bi-star');
+                    favouritesButton.text(" Favorilerden Çıkar");
+                    favouritesButton.removeClass("js-add-to-favourites");
+                    favouritesButton.addClass("js-remove-from-favourites");
+                    favouritesButton[0].prepend(favouritesContext[0])
+
+                    bindEvents();
+                });
+            }
+        });
+
+        $('.js-remove-from-favourites').off('click').on('click', function (event) {
+            const userId = $(this).attr('data-user-id') || '';
+            const favouritesContext = $('span', this);
+            const favouritesButton = $(this);
+
+            if (userId) {
+                var settings = {
+                    "url": `${window.config.baseUrl}api/user/unfollow?id=${userId}`,
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Authorization": `Bearer ${document.cookie.split('AccessToken=').slice(-1)[0].split(';')[0]}`,
+                    },
+                };
+
+                $.ajax(settings).done(function (response) {
+                    favouritesContext.addClass('bi-star');
+                    favouritesContext.removeClass('bi-star-fill');
+                    favouritesButton.text(" Favorilere Ekle");
+                    favouritesButton.addClass("js-add-to-favourites");
+                    favouritesButton.removeClass("js-remove-from-favourites");
+                    favouritesButton[0].prepend(favouritesContext[0])
+
+                    bindEvents();
+                });
+            }
+        });
+
+        $('.js-send-message').off('click').on('click', function () {
+            window.location.replace('/chat?userId=' + $(this).attr('data-user-id') + '&username=' + $(this).attr('data-username'));
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        bindEvents();
+    });
+</script>

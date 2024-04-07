@@ -43,7 +43,14 @@ namespace RoomieRosterWeb.Controllers
             {
                 await SignInAsync(response);
 
-                return RedirectToAction("Index", "Home");
+                var cookieOptions = new CookieOptions(); 
+                cookieOptions.Expires = DateTime.Now.AddDays(5000);
+                cookieOptions.Path = "/"; 
+
+                Response.Cookies.Append("LandingVisited", "true", cookieOptions);
+
+
+                return RedirectToAction("App", "Home");
             }
             else
             {
