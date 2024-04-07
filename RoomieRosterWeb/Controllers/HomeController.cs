@@ -8,7 +8,6 @@ using RoomieRosterWeb.ViewModels;
 
 namespace RoomieRosterWeb.Controllers;
 
-[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -24,7 +23,8 @@ public class HomeController : Controller
         _preferencesService = preferencesService;
     }
 
-    public async Task<IActionResult> IndexAsync()
+    [Authorize]
+    public async Task<IActionResult> AppAsync()
     {
         var result = await _matchService.GetMatchesAsync(HttpContext.Request.Cookies["AccessToken"]);
         var userInfoResult = await _authService.GetUser(User.FindFirstValue(ClaimTypes.NameIdentifier), HttpContext.Request.Cookies["AccessToken"]);
@@ -76,6 +76,7 @@ public class HomeController : Controller
         });
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> UpdatePreferences(UserPreferenecesDto userPreferenecesDto)
     {
@@ -98,11 +99,19 @@ public class HomeController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize]
     public IActionResult Privacy()
     {
         return View();
     }
 
+      public IActionResult Index()
+    {
+        return View();
+    }
+
+
+    [Authorize]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
