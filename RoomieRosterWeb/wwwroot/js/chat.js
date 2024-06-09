@@ -75,6 +75,11 @@ const startConnection = async () => {
 
 
 const bindChatEvents = () => {
+    $('.backToUserListButton').off('click').on('click',()=>{
+        showUserBoxOnMobile();
+    });
+
+    
     $('.messages-box .list-group-item').off('click').on('click',
         function (event) {
             const chatId = $(this).attr('data-chat-id');
@@ -98,7 +103,7 @@ const bindChatEvents = () => {
                 renderChatBox([], chatInfo);
             }
             
-
+            showChatBoxOnMobile();
             bindChatEvents();
         });
 
@@ -239,7 +244,6 @@ const getChats = () => {
 
 
 const readChat = (chatId) => {
-    console.error('CHAT ID READED', chatId);
     window.connection.invoke("ReadChat", Number(chatId)).then((response) => {
     }).catch(function (err) {
         return console.error(err.toString());
@@ -402,6 +406,16 @@ const onNewMessage = () => {
             $('.toast').toast('show');
         }
     });
+}
+
+const showChatBoxOnMobile = () =>{
+    $('.c-box').css('display','block');
+    $('.u-box').css('display','none');
+}
+
+const showUserBoxOnMobile = () =>{
+    $('.c-box').css('display','none');
+    $('.u-box').css('display','block');
 }
 
 connectionBuild();

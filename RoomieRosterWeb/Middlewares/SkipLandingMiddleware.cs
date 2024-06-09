@@ -7,9 +7,13 @@ public class SkipLandingMiddleware
         _next = next;
     }
 
-    public async Task InvokeAsync(HttpContext context){
-        if(context.Request.Cookies.ContainsKey("LandingVisited") 
-        && (context.Request.Path.Value == "/" || (context.Request.Path.Value ?? "").ToLower().Contains("index"))){
+    public async Task InvokeAsync(HttpContext context)
+    {
+        string requestPath = (context.Request.Path.Value ?? "").ToLower();
+
+        if (context.Request.Cookies.ContainsKey("LandingVisited")
+        && (requestPath == "/" || (requestPath.Contains("index") && requestPath.Contains("home"))))
+        {
             context.Response.Redirect("/Home/App");
         }
 
@@ -19,7 +23,8 @@ public class SkipLandingMiddleware
 
 public static class SkipLandingMiddlewareExtensions
 {
-    public static IApplicationBuilder UseSkipLandingMiddleware(this IApplicationBuilder builder){
+    public static IApplicationBuilder UseSkipLandingMiddleware(this IApplicationBuilder builder)
+    {
         return builder.UseMiddleware<SkipLandingMiddleware>();
     }
 }
