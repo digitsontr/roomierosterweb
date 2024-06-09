@@ -195,3 +195,21 @@ input[type='date']:after {
     content: attr(gg.aa.yyyy)
 }
 /*For material input css end*/
+
+@media only screen and (max-width: 1024px) {
+    .navbar.navbar-dark{
+        padding: 1rem !important;
+
+    }
+
+    .navbar-brand{
+        font-size: 1.5rem;
+        margin: auto;
+    }
+
+    .navbar .dropdown{
+        order: -1;
+        align-self: end;
+        margin-right: 5%;
+    }
+}

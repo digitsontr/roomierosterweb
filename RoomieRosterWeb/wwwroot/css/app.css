@@ -1,0 +1,55 @@
+@media only screen and (max-width: 1200px) {
+
+    /* --Page Layout Settings Start-- */
+
+    .container {
+        flex-direction: column !important;
+    }
+
+    .container .left {
+        width: 100% !important;
+    }
+
+    .container .aside {
+        width: 100% !important;
+    }
+
+    /* --Page Layout Settings End-- */
+
+
+    /* --Match Card Settings Start-- */
+    .container .left .custom-scrollable .card .d-flex{
+        flex-direction: column !important;
+    }
+
+    .container .left .custom-scrollable .card .d-flex div{
+        display: flex;
+        width: 100%;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .container .left .custom-scrollable .card .d-flex div:last-child{
+        width: 100% !important;
+        align-items: center !important;
+    }
+
+    .container .left .custom-scrollable .card .d-flex .actionContainer{
+        width: 100% !important;
+        justify-content: center !important;
+        flex-direction: row !important;
+    }
+
+    .container .left .custom-scrollable .card .d-flex .actionContainer button{
+        margin-left: .5rem !important;
+    }
+    /* --Match Card Settings End-- */
+}
+
+@media only screen and (max-width: 380px) {
+    /* --Match Card Settings Start-- */
+     .container .left .budgetPreference{
+        display: none;
+     }
+    /* --Match Card Settings End-- */
+}

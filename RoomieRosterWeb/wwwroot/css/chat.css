@@ -34,3 +34,52 @@ input::placeholder {
     background-color: #a3b384 !important;
 }
 
+.backToUserListButton{
+    display: none;
+}
+
+@media only screen and (min-width: 1024px) {
+    .u-box{
+        display: block !important;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .u-box{
+        width: 100%;
+    }
+
+    .c-box{
+        display: none;
+        flex-direction: column;
+        width: 100% !important;
+    }
+
+    .-imageAndBackButton{
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        align-items: center;
+        margin-bottom: auto !important;
+    }
+
+    .-userinfo img{
+        width: 45px !important;
+        height: 45px !important;
+    }
+
+    .-userinfo{
+        display: flex;
+        justify-content: space-between !important;
+    }
+
+    .backToUserListButton{
+        display: block;
+    }
+
+    .chat-box{
+        width: 100% !important;
+        margin-bottom: 0px !important;
+        margin-top: auto !important;
+    }
+}
